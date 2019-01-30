@@ -5,6 +5,9 @@ declare(strict_types = 1);
 namespace Service\Product;
 
 use Model;
+use Service\Sorter\ISorter;
+use Service\Sorter\NameSorter;
+use Service\Sorter\PriceSorter;
 
 class Product
 {
@@ -32,9 +35,16 @@ class Product
         $productList = $this->getProductRepository()->fetchAll();
 
         // Применить паттерн Стратегия
-        // $sortType === 'price'; // Сортировка по цене
-        // $sortType === 'name'; // Сортировка по имени
-
+        switch ($sortType) {
+            // $sortType === 'price'; // Сортировка по цене
+            case 'price':
+                $productList = $this->sort(new PriceSorter(), $productList);
+                break;
+            // $sortType === 'name'; // Сортировка по имени
+            case 'name':
+                $productList = $this->sort(new NameSorter(), $productList);
+                break;
+        }
         return $productList;
     }
 
@@ -46,5 +56,16 @@ class Product
     protected function getProductRepository(): Model\Repository\Product
     {
         return new Model\Repository\Product();
+    }
+
+    /**
+     * Реализация стратегии
+     *
+     * @param ISorter $sorter
+     * @param array $array
+     * @return $array
+     */
+    protected function sort(ISorter $sorter, $array){
+        return $sorter->sort($array);
     }
 }

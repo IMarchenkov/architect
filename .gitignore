@@ -2,7 +2,7 @@
 .DS_Store
 .php_cs.cache
 .vagrant
-ubuntu-bionic-18.04-cloudimg-console.log init
+ubuntu-bionic-18.04-cloudimg-console.log
 phpunit.xml
 /app/config/parameters.yml
 /bin/

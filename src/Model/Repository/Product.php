@@ -21,8 +21,21 @@ class Product
         }
 
         $productList = [];
+        $productPrototype = null;
         foreach ($this->getDataFromSource(['id' => $ids]) as $item) {
-            $productList[] = new Entity\Product($item['id'], $item['name'], $item['price']);
+            /* @var Entity\Product $product*/
+            $product = $productPrototype ?? new Entity\Product($item['id'], $item['name'], $item['price']);
+
+            if (!$productPrototype)
+                $productPrototype = $product;
+            else {
+                $product = clone $productPrototype;
+                $product->setId($item['id']);
+                $product->setName($item['name']);
+                $product->setPrice($item['price']);
+            }
+
+            $productList[] = $product;
         }
 
         return $productList;
@@ -36,8 +49,21 @@ class Product
     public function fetchAll(): array
     {
         $productList = [];
+        $productPrototype = null;
         foreach ($this->getDataFromSource() as $item) {
-            $productList[] = new Entity\Product($item['id'], $item['name'], $item['price']);
+            /* @var Entity\Product $product*/
+            $product = $productPrototype ?? new Entity\Product($item['id'], $item['name'], $item['price']);
+
+            if (!$productPrototype)
+                $productPrototype = $product;
+            else {
+                $product = clone $productPrototype;
+                $product->setId($item['id']);
+                $product->setName($item['name']);
+                $product->setPrice($item['price']);
+            }
+
+            $productList[] = $product;
         }
 
         return $productList;
